@@ -26,27 +26,9 @@
         </select>
       </div>
 
-      <div v-if="filteredJobs.length > 0">
-        <div v-for="job in filteredJobs" :key="job.id" class="job-card">
-          <h2 class="job-title">{{ job.title }}</h2>
-          <div class="company-name">{{ job.company }}</div>
-          <div class="details">{{ job.location }} • {{ job.postedDate }}</div>
-
-          <div class="stipend">
-            Stipend: {{ job.stipend > 0 ? '$' + job.stipend : 'Unpaid' }}
-          </div>
-
-          <div :class="['badge', job.stipend > 0 ? 'badge-paid' : 'badge-unpaid']">
-            {{ job.stipend > 0 ? 'Paid' : 'Unpaid' }}
-          </div>
-        </div>
-      </div>
-
-      <div v-else class="no-results">
-        <h3>No internships found matching your search.</h3>
-      </div>
+      <div id="job-holder"></div>
     </div>
 
-    <script src="../static/main.js"></script>
+    <script type="module" src="../static/main.js"></script>
   </body>
 </html>
