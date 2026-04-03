@@ -1,5 +1,5 @@
-// import filteredJobs from './data.json' with { type: 'json' };
-const filteredJobs = [];
+import filteredJobs from './data.json' with { type: 'json' };
+// const filteredJobs = [];
 
 const container = document.getElementById('container');
 
