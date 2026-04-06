@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GradJobs | Find Your First Internship</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: { DEFAULT: "#2563eb", hover: "#1d4ed8" },
+            },
+          },
+        },
+      };
+    </script>
     <link href="../static/main.css" rel="stylesheet" />
   </head>
-  <body>
-
-    <div id="app" class="container">
-      <header>
+  <body class="antialiased text-gray-900">
+    <div id="app" class="container job-board-app mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+      <header class="pt-6 text-center sm:pt-8">
         <h1>🎓 GradJobs</h1>
-        <p>The best internships for new graduates, all in one place.</p>
+        <p class="mx-auto max-w-xl">
+          The best internships for new graduates, all in one place.
+        </p>
       </header>
 
-      <div class="toolbar">
-        <input type="text" v-model="searchQuery" placeholder="Search job titles...">
-
+      <div class="toolbar mx-auto mt-6 max-w-7xl">
+        <input
+          id="job-search"
+          type="search"
+          autocomplete="off"
+          placeholder="Search job titles or companies…"
+        />
         <label for="sort">Sort by:</label>
-        <select id="sort" v-model="sortKey">
+        <select id="sort" name="sort">
           <option value="newest">Newest First</option>
           <option value="money-high">Stipend: High to Low</option>
           <option value="money-low">Stipend: Low to High</option>
@@ -26,7 +43,37 @@
         </select>
       </div>
 
-      <div id="job-holder"></div>
+      <!-- List-only initially; switches to 40/60 master–detail when a job is selected -->
+      <div
+        id="job-board-root"
+        data-layout="list"
+        class="job-board-root mx-auto mt-8 w-full max-w-7xl transition-[gap] duration-300 ease-out lg:mt-10"
+      >
+        <aside
+          id="job-list-panel"
+          class="job-list-panel w-full transition-[width,border-radius,box-shadow] duration-300 ease-out"
+        >
+          <div
+            id="job-list"
+            class="flex flex-col gap-4 transition-[max-height,padding] duration-300 ease-out"
+            aria-label="Job results"
+          ></div>
+        </aside>
+
+        <section
+          id="job-detail-shell"
+          class="job-detail-shell hidden min-h-0 min-w-0 opacity-0 transition-opacity duration-300 ease-out lg:sticky lg:top-4 lg:self-start"
+          aria-live="polite"
+          aria-hidden="true"
+        >
+          <div
+            id="job-detail"
+            class="job-detail-panel relative h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-md sm:p-8 lg:max-h-[min(100vh-5rem,920px)] lg:overflow-y-auto"
+          >
+            <div id="job-detail-content" class="job-detail-content"></div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <script type="module" src="../static/main.js"></script>
