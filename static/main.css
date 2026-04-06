@@ -1,100 +1,1038 @@
-/* CSS: Making it look like a modern job board */
+/* =============================================================================
+   GradJobs — Design system (recruitment / job board)
+   ============================================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* -----------------------------------------------------------------------------
+   Variables
+   ----------------------------------------------------------------------------- */
 :root {
-  --primary: #2557a7; /* Indeed Blue */
-  --bg: #f3f2f1;
-  --text: #2d2d2d;
+  /* Brand */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-soft: rgba(37, 99, 235, 0.08);
+  --color-primary-focus-ring: rgba(37, 99, 235, 0.4);
+
+  /* Surfaces */
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-border-strong: #d1d5db;
+
+  /* Text */
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fef3c7;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Typography */
+  --font-sans: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-size-body: 16px;
+  --line-height-body: 1.6;
+  --transition-base: all 0.2s ease-in-out;
+
+  /* Layout */
+  --container-max: 960px;
+  --header-max: 720px;
+}
+
+/* -----------------------------------------------------------------------------
+   Global reset
+   ----------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
   margin: 0;
-  padding: 20px;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  padding: var(--space-4);
 }
 
-.container {
-  max-width: 900px;
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Keyboard focus — high visibility */
+:focus-visible {
+  outline: 3px solid var(--color-primary-focus-ring);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* -----------------------------------------------------------------------------
+   Typography
+   ----------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 var(--space-3);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+}
+
+p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+small,
+.text-small {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Layout
+   ----------------------------------------------------------------------------- */
+.container,
+#app.container {
+  max-width: var(--container-max);
   margin: 0 auto;
+  padding-bottom: var(--space-10);
 }
 
-header {
-  text-align: center;
-  margin-bottom: 30px;
+#app.job-board-app.container {
+  max-width: 80rem;
 }
 
-/* Toolbar for Sorting */
-.toolbar {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+#job-holder {
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* -----------------------------------------------------------------------------
+   Buttons
+   ----------------------------------------------------------------------------- */
+button,
+.button,
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-base);
+  background: var(--color-primary);
+  color: #fff;
 }
 
-select, input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+button:hover,
+.button:hover,
+.btn:hover {
+  background: var(--color-primary-hover);
 }
 
-/* Job Card Styling */
+button:disabled,
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background: var(--color-bg);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-outline:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.job-card .btn-apply,
+.job-card a.btn,
+.job-card .apply {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+}
+
+/* -----------------------------------------------------------------------------
+   Forms
+   ----------------------------------------------------------------------------- */
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: var(--line-height-body);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  max-width: 100%;
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--color-border-strong);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+select {
+  cursor: pointer;
+  appearance: auto;
+  min-width: 0;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Search bar emphasis (toolbar primary field) */
+.toolbar input[type="text"],
+.toolbar input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+}
+
+/* -----------------------------------------------------------------------------
+   Cards
+   ----------------------------------------------------------------------------- */
 .job-card {
-  background: white;
-  border: 1px solid #e4e2e0;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 15px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .job-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-strong);
 }
 
 .job-title {
-  color: var(--primary);
-  margin: 0 0 5px 0;
-  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin: 0;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-weight: 700;
+  line-height: 1.3;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .company-name {
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .details {
-  font-size: 0.9rem;
-  color: #6f6f6f;
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.details::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  flex-shrink: 0;
 }
 
 .stipend {
-  font-weight: bold;
-  color: #2e7d32; /* Green for money */
-  margin-top: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-success);
+  margin: 0;
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
   text-transform: uppercase;
-  margin-top: 10px;
+  letter-spacing: 0.045em;
+  margin: 0;
+  margin-top: 0;
+  align-self: flex-start;
 }
 
-.badge-paid { background: #e8f5e9; color: #2e7d32; }
-.badge-unpaid { background: #ffebee; color: #c62828; }
+.badge-paid {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-unpaid {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* Re-stack: badge sits with meta row on wider cards */
+@media (min-width: 640px) {
+  .job-card .badge {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    margin-top: 0;
+  }
+
+  .job-title {
+    padding-right: 5.5rem;
+    padding-bottom: var(--space-3);
+  }
+
+  .stipend {
+    margin-top: var(--space-1);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Navbar
+   ----------------------------------------------------------------------------- */
+nav:not(.pagination),
+.navbar,
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 0;
+  margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) var(--space-8);
+  max-width: none;
+}
+
+nav:not(.pagination) a,
+.navbar a {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+nav:not(.pagination) a:hover,
+.navbar a:hover {
+  color: var(--color-primary);
+}
+
+/* Header / hero */
+header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+  max-width: var(--header-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--space-6) 0 var(--space-2);
+}
+
+header h1 {
+  margin-bottom: var(--space-3);
+  color: var(--color-text-primary);
+}
+
+header p {
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Toolbar — search & filters */
+.toolbar {
+  background: var(--color-surface);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-4);
+  transition: var(--transition-base);
+}
+
+.toolbar:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-strong);
+}
+
+.toolbar label {
+  margin: 0;
+  align-self: center;
+}
+
+.toolbar select {
+  width: 100%;
+}
 
 .no-results {
   text-align: center;
-  padding: 50px;
-  color: #666;
+  padding: var(--space-12) var(--space-6);
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.no-results h3 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+/* -----------------------------------------------------------------------------
+   Sidebar / filters (optional layout)
+   ----------------------------------------------------------------------------- */
+.sidebar,
+.filters,
+.filter-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-md);
+}
+
+.sidebar h2,
+.sidebar h3,
+.filter-panel h3 {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   Pagination
+   ----------------------------------------------------------------------------- */
+.pagination,
+nav.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: var(--space-8) 0;
+  padding: 0;
+  list-style: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.pagination a,
+.pagination button,
+.pagination .page {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: var(--transition-base);
+}
+
+.pagination a:hover,
+.pagination button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.pagination .active,
+.pagination .current {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.pagination .active:hover {
+  background: var(--color-primary-hover);
+  color: #fff;
+}
+
+/* -----------------------------------------------------------------------------
+   Footer
+   ----------------------------------------------------------------------------- */
+footer,
+.site-footer {
+  margin-top: var(--space-12);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+footer a,
+.site-footer a {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+footer a:hover,
+.site-footer a:hover {
+  color: var(--color-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   Tables
+   | ----------------------------------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+thead {
+  background: var(--color-bg);
+}
+
+th,
+td {
+  padding: var(--space-4) var(--space-5);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+tbody tr:hover {
+  background: var(--color-primary-soft);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* -----------------------------------------------------------------------------
+   Alerts & messages
+   ----------------------------------------------------------------------------- */
+.alert,
+.message,
+.flash {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-4);
+  font-size: 0.9375rem;
+}
+
+.alert-success {
+  background: var(--color-success-bg);
+  border-color: rgba(22, 163, 74, 0.25);
+  color: #166534;
+}
+
+.alert-warning {
+  background: var(--color-warning-bg);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #92400e;
+}
+
+.alert-danger,
+.alert-error {
+  background: var(--color-danger-bg);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: #991b1b;
+}
+
+.alert-info {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+  color: var(--color-text-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   Modal / dialog
+   ----------------------------------------------------------------------------- */
+.modal,
+.dialog,
+[role="dialog"] {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-6);
+  max-width: min(520px, 100vw - 2rem);
+}
+
+.modal-backdrop,
+.dialog-backdrop {
+  background: rgba(17, 24, 39, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+/* -----------------------------------------------------------------------------
+   Utilities
+   ----------------------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Responsive breakpoints
+   ----------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  body {
+    padding: var(--space-6);
+  }
+
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .toolbar label {
+    order: 2;
+  }
+
+  .toolbar select {
+    order: 3;
+    flex: 0 1 220px;
+    width: auto;
+  }
+
+  .toolbar input[type="text"],
+  .toolbar input[type="search"] {
+    order: 1;
+    flex: 1 1 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container,
+  #app.container {
+    max-width: 840px;
+  }
+
+  #app.job-board-app.container {
+    max-width: 80rem;
+  }
+
+  header {
+    padding-top: var(--space-8);
+    margin-bottom: var(--space-10);
+  }
+
+  .job-card:not(.job-card--list) {
+    padding: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container,
+  #app.container {
+    max-width: var(--container-max);
+  }
+
+  #app.job-board-app.container {
+    max-width: 80rem;
+  }
+
+  .toolbar {
+    padding: var(--space-6);
+    gap: var(--space-5);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Master–detail (conditional list vs split layout)
+   ----------------------------------------------------------------------------- */
+.job-board-root {
+  align-items: stretch;
+}
+
+button.job-card.job-card--browse {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+button.job-card.job-card--browse:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-strong);
+}
+
+.job-list-panel {
+  scrollbar-gutter: stable;
+}
+
+.job-list-panel .job-card--list {
+  scroll-margin: var(--space-3);
+}
+
+button.job-card.job-card--list {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  padding: var(--space-4) var(--space-5);
+  gap: var(--space-2);
+  box-shadow: var(--shadow-sm);
+}
+
+button.job-card.job-card--list:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+button.job-card.job-card--list.is-active,
+button.job-card.job-card--list[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+button.job-card.job-card--list .job-title {
+  font-size: 1rem;
+  padding-bottom: var(--space-2);
+  border-bottom-color: var(--color-border);
+}
+
+button.job-card.job-card--list .company-name {
+  font-size: 0.9375rem;
+}
+
+button.job-card.job-card--list .stipend {
+  margin-top: 0;
+  padding-top: var(--space-3);
+  border-top: none;
+  font-size: 0.875rem;
+}
+
+.stipend.stipend--unpaid {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+button.job-card.job-card--list .badge {
+  position: static;
+  margin-top: var(--space-2);
+  align-self: flex-start;
+}
+
+button.job-card.job-card--list .job-title {
+  padding-right: 0;
+}
+
+.job-detail-panel {
+  color: var(--color-text-primary);
+}
+
+.job-detail-empty h2 {
+  color: var(--color-text-primary);
+}
+
+.job-detail-header {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.job-detail-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.job-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.job-detail-company {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.job-detail-dot {
+  color: var(--color-text-muted);
+  user-select: none;
+}
+
+.job-detail-stipend-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.job-detail-stipend {
+  font-weight: 600;
+  color: var(--color-success);
+}
+
+.job-detail-stipend--muted {
+  color: var(--color-text-secondary);
+}
+
+.job-detail-actions {
+  margin-bottom: var(--space-8);
+}
+
+.job-detail-actions .btn-apply {
+  padding: var(--space-4) var(--space-8);
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 16rem;
+}
+
+.job-detail-body .job-detail-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-primary);
+}
+
+.job-detail-description.prose-flow p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: var(--line-height-body);
+}
+
+.job-detail-description.prose-flow p:last-child {
+  margin-bottom: 0;
+}
+
+.job-detail-description.prose-flow strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+   Reduced motion
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .job-card:hover,
+  button.job-card.job-card--browse:hover {
+    transform: none;
+  }
 }
