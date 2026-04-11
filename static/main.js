@@ -15,7 +15,7 @@ const container = document.getElementById('container');
 
 console.log(filteredJobs.name);
 //if the search is not empty create this element
-const jobHolder = document.getElementById('job-holder');
+const jobsHolder = document.getElementById('jobs-holder');
 
 // Equivalent to v-if="filteredJobs.length > 0"
 if (filteredJobs.length > 0) {
@@ -57,7 +57,7 @@ if (filteredJobs.length > 0) {
     jobCard.append(title, company, details, stipend, badge);
 
     // 8. Add the completed card to the DOM
-    jobHolder.append(jobCard);
+    jobsHolder.append(jobCard);
   });
 } else {
   const noResults = document.createElement('div');

@@ -7,16 +7,18 @@
     <link href="../static/main.css" rel="stylesheet" />
   </head>
   <body>
-      <header>
-      <div class="left">
-        <h1>🎓 GradJobs</h1>
-        <p>For best enterprise education</p>
+    <header>
+      <div class="header-container">
+        <div class="header-left">
+          <h1>🎓 GradJobs</h1>
+          <p>For best enterprise education</p>
+        </div>
+        <div class="header-right">
+          <a href="/signin/">sign in</a>
+        </div>
       </div>
+    </header>
 
-      <!-- <div class="right"> -->
-      <!--   <h1>hello</h1> -->
-      <!-- </div> -->
-      </header>
     <div id="app" class="container">
       <div class="toolbar">
         <input type="text" v-model="searchQuery" placeholder="Search job titles...">
@@ -30,7 +32,10 @@
         </select>
       </div>
 
-      <div id="job-holder"></div>
+      <div class="jobs-container">
+      <div id="jobs-holder"></div>
+      <div id="jobs-preview"></div>
+      </div>
     </div>
 
     <script type="module" src="../static/main.js"></script>

@@ -1,3 +1,50 @@
+/* /* Start Variables */ */
+/* :root { */
+/*   --main-color: #10cab7; */
+/*   --secondary-color: #2c4755; */
+/*   --section-padding: 60px; */
+/*   --section-background: #f6f6f6; */
+/*   --main-duration: 0.5s; */
+/* } */
+/* End Variables */
+
+/* Start Global Rules */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+.container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Small */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+/* Medium */
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+/* Large */
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+/* End Global Rules */
+
+
+
 /* CSS: Making it look like a modern job board */
 :root {
   /* --primary: #2557a7; /* Indeed Blue */ 
@@ -11,47 +58,55 @@
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: var(--bg);
   color: var(--text);
-  margin: 0;
 }
 
 header {
-  position: relative;
-  width: 100%;
-  height: 70px;
   border-bottom: 2px solid var(--border);
-  box-shadow: 10px;
-  text-align: center;
-  /* margin-top: 0; */
-  padding: 0, 30px;
-  margin-bottom: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
   background: hsl(from var(--bg) h s calc(l - 10));
-  /* display: flex; */
-  /* justify-content: space-evenly; */
+  /* width: 100%; */
+  height: 70px;
+  margin-bottom: 30px;
 }
 
-header>div.left {
-  position: absolute;
-  left: 20px;
-  /* margin-right: 300px; */
+.header-container {
+  height: 100%;
+  box-shadow: 10px;
   display: flex;
-  /* justify-content: space-around; */
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* header>div.right { */
-/*   right: 20px; */
-/*   background: white; */
-/* } */
-.container {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
+.header-left {
+  display: flex;
 }
+
+/* .header-container .right { */
+/* } */
+
+.header-right a {
+  background: var(--border);
+  border-radius: 8px;
+  size: 20px;
+  font-weight: bold;
+  padding: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+
+/* .header-right a:hover { */
+/*   text-decoration: underline; */
+/* } */
 
 /* Toolbar for Sorting */
 .toolbar {
@@ -74,7 +129,7 @@ select, input {
 
 /* Job Card Styling */
 .job-card {
-  background: hsl(from var(--bg) h s calc(l + 10));;
+  background: hsl(from var(--bg) h s calc(l + 10));
   border: 1px solid #e4e2e0;
   border-radius: 8px;
   padding: 20px;
@@ -85,7 +140,9 @@ select, input {
 
 .job-card:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: var(--primary);
+  border-color: var(--border);
+  transform: scale(1.01);
+  transition: 0.5s;
 }
 
 .job-title {
@@ -128,3 +185,6 @@ select, input {
   padding: 50px;
   color: #666;
 }
+
+
+
