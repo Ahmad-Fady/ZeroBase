@@ -3,78 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GradJobs | Find Your First Internship</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: { DEFAULT: "#2563eb", hover: "#1d4ed8" },
-            },
-          },
-        },
-      };
-    </script>
+    <title>GradJobs | Career Launch Platform</title>
     <link href="../static/main.css" rel="stylesheet" />
   </head>
-  <body class="antialiased text-gray-900">
-    <div id="app" class="container job-board-app mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-      <header class="pt-6 text-center sm:pt-8">
-        <h1>🎓 GradJobs</h1>
-        <p class="mx-auto max-w-xl">
-          The best internships for new graduates, all in one place.
+  <body data-page="home">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="./index.html" class="brand">GradJobs</a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="./index.html" data-nav="home">Home</a>
+          <a href="./learn.html" data-nav="learn">Learn</a>
+          <a href="./internships.html" data-nav="internships">Internships</a>
+          <a href="./jobs.html" data-nav="jobs">Jobs</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__text">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero container">
+        <p class="eyebrow">Career Platform For New Graduates</p>
+        <h1>Learn faster, apply smarter, and land your next role.</h1>
+        <p class="hero-subtitle">
+          Build your roadmap, discover internships, and browse full-time jobs in a single clean workflow.
         </p>
-      </header>
+      </section>
 
-      <div class="toolbar mx-auto mt-6 max-w-7xl">
-        <input
-          id="job-search"
-          type="search"
-          autocomplete="off"
-          placeholder="Search job titles or companies…"
-        />
-        <label for="sort">Sort by:</label>
-        <select id="sort" name="sort">
-          <option value="newest">Newest First</option>
-          <option value="money-high">Stipend: High to Low</option>
-          <option value="money-low">Stipend: Low to High</option>
-          <option value="company">Company Name (A-Z)</option>
-        </select>
+      <section class="container choice-grid" aria-label="Main options">
+        <a class="choice-card" href="./learn.html">
+          <h2>Learn</h2>
+          <p>Explore software engineering tracks and filter paths based on your goals.</p>
+          <span class="choice-cta">Open Learning Paths</span>
+        </a>
+
+        <a class="choice-card" href="./internships.html">
+          <h2>Find Internship</h2>
+          <p>Search internships by role and location with fast filters and cleaner listings.</p>
+          <span class="choice-cta">Browse Internships</span>
+        </a>
+
+        <a class="choice-card" href="./jobs.html">
+          <h2>Find Job</h2>
+          <p>Review entry-level and junior jobs by role, seniority, and location.</p>
+          <span class="choice-cta">Explore Jobs</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>GradJobs</p>
+        <p>Focused, modern recruiting experience for students and recruiters.</p>
       </div>
-
-      <!-- List-only initially; switches to 40/60 master–detail when a job is selected -->
-      <div
-        id="job-board-root"
-        data-layout="list"
-        class="job-board-root mx-auto mt-8 w-full max-w-7xl transition-[gap] duration-300 ease-out lg:mt-10"
-      >
-        <aside
-          id="job-list-panel"
-          class="job-list-panel w-full transition-[width,border-radius,box-shadow] duration-300 ease-out"
-        >
-          <div
-            id="job-list"
-            class="flex flex-col gap-4 transition-[max-height,padding] duration-300 ease-out"
-            aria-label="Job results"
-          ></div>
-        </aside>
-
-        <section
-          id="job-detail-shell"
-          class="job-detail-shell hidden min-h-0 min-w-0 opacity-0 transition-opacity duration-300 ease-out lg:sticky lg:top-4 lg:self-start"
-          aria-live="polite"
-          aria-hidden="true"
-        >
-          <div
-            id="job-detail"
-            class="job-detail-panel relative h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-md sm:p-8 lg:max-h-[min(100vh-5rem,920px)] lg:overflow-y-auto"
-          >
-            <div id="job-detail-content" class="job-detail-content"></div>
-          </div>
-        </section>
-      </div>
-    </div>
+    </footer>
 
     <script type="module" src="../static/main.js"></script>
   </body>

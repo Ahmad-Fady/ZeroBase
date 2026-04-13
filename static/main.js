@@ -1,326 +1,188 @@
-import allJobs from "./data.json" with { type: "json" };
+import internshipData from "./data.json" with { type: "json" };
 
-const root = document.getElementById("job-board-root");
-const jobListEl = document.getElementById("job-list");
-const listPanelEl = document.getElementById("job-list-panel");
-const detailShell = document.getElementById("job-detail-shell");
-const jobDetailContent = document.getElementById("job-detail-content");
-const searchInput = document.getElementById("job-search");
-const sortSelect = document.getElementById("sort");
+const trackData = [
+  "Frontend",
+  "Backend",
+  "Full Stack",
+  "Mobile",
+  "DevOps",
+  "Cloud",
+  "Cybersecurity",
+  "QA",
+  "DSA",
+  "System Design",
+  "Database",
+  "Embedded",
+  "Game Dev",
+  "AI Engineering",
+];
 
-/** Selected job object, or null when browsing the full-width list */
-let selectedJob = null;
+const jobsData = [
+  { id: 1, title: "Junior Frontend Engineer", company: "Shopify", level: "Junior", location: "Remote" },
+  { id: 2, title: "Backend Engineer", company: "Notion", level: "Entry", location: "San Francisco, CA" },
+  { id: 3, title: "Cloud Engineer", company: "AWS", level: "Mid", location: "Seattle, WA" },
+  { id: 4, title: "QA Automation Engineer", company: "Atlassian", level: "Entry", location: "Remote" },
+  { id: 5, title: "Cybersecurity Analyst", company: "CrowdStrike", level: "Junior", location: "Austin, TX" },
+  { id: 6, title: "AI Engineer", company: "OpenAI", level: "Mid", location: "San Francisco, CA" },
+];
 
-const LIST_BOARD =
-  "job-board-root mx-auto mt-8 w-full max-w-7xl flex flex-col gap-4 transition-all duration-300 ease-out lg:mt-10";
+const THEME_KEY = "gradjobs-theme";
 
-const SPLIT_BOARD =
-  "job-board-root mx-auto mt-8 w-full max-w-7xl flex min-h-[50vh] flex-col gap-4 transition-all duration-300 ease-out lg:mt-10 lg:min-h-[calc(100vh-11rem)] lg:flex-row lg:items-stretch lg:gap-6";
-
-const LIST_PANEL =
-  "job-list-panel w-full border-0 bg-transparent shadow-none transition-all duration-300 ease-out";
-
-const SPLIT_PANEL =
-  "job-list-panel w-full max-lg:order-last flex-shrink-0 border border-gray-200 bg-white shadow-sm transition-all duration-300 ease-out lg:w-2/5 lg:rounded-2xl";
-
-const LIST_JOBLIST =
-  "flex flex-col gap-4 sm:gap-5 transition-all duration-300 ease-out";
-
-const SPLIT_JOBLIST =
-  "flex max-h-[55vh] flex-col gap-3 overflow-y-auto p-3 transition-all duration-300 ease-out sm:p-4 lg:max-h-[min(100vh-8rem,900px)]";
-
-const LIST_DETAIL =
-  "job-detail-shell min-h-0 min-w-0 transition-all duration-300 ease-out";
-
-const SPLIT_DETAIL =
-  "job-detail-shell min-h-[280px] min-w-0 flex-1 transition-all duration-300 ease-out max-lg:order-first lg:sticky lg:top-4 lg:self-start lg:w-3/5";
-
-function formatDate(iso) {
-  try {
-    return new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-    }).format(new Date(iso));
-  } catch {
-    return iso;
-  }
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem(THEME_KEY, theme);
+  const icon = document.querySelector(".theme-toggle__icon");
+  const text = document.querySelector(".theme-toggle__text");
+  if (icon) icon.textContent = theme === "dark" ? "☀️" : "🌙";
+  if (text) text.textContent = theme === "dark" ? "Light" : "Dark";
 }
 
-function buildDescription(job) {
-  if (job.description && String(job.description).trim()) {
-    return job.description.trim();
-  }
-  const pay =
-    job.stipend > 0
-      ? `This internship offers a stipend of $${job.stipend.toLocaleString()}.`
-      : "Compensation for this role is listed as unpaid; confirm details with the employer.";
-  return [
-    `${job.company} is looking for a **${job.title}** based in ${job.location}. ${pay}`,
-    "",
-    "You will collaborate with the team on real projects, learn tooling used in production, and participate in reviews and mentorship. Strong communication and curiosity are valued alongside core technical skills.",
-    "",
-    `Posted on ${formatDate(job.postedDate)}. Apply early—roles may close when capacity is reached.`,
-  ].join("\n");
-}
+function setupTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  const preferredDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(saved || (preferredDark ? "dark" : "light"));
 
-function markdownLite(text) {
-  return text
-    .split("\n")
-    .map((line) => {
-      const trimmed = line.trim();
-      if (!trimmed) return "";
-      const escaped = trimmed
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      return `<p>${escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`;
-    })
-    .filter(Boolean)
-    .join("");
-}
-
-function filterJobs(jobs, query) {
-  const q = query.trim().toLowerCase();
-  if (!q) return jobs;
-  return jobs.filter(
-    (j) =>
-      j.title.toLowerCase().includes(q) ||
-      j.company.toLowerCase().includes(q) ||
-      (j.location && j.location.toLowerCase().includes(q)),
-  );
-}
-
-function sortJobs(jobs, key) {
-  const copy = [...jobs];
-  switch (key) {
-    case "money-high":
-      return copy.sort((a, b) => b.stipend - a.stipend);
-    case "money-low":
-      return copy.sort((a, b) => a.stipend - b.stipend);
-    case "company":
-      return copy.sort((a, b) => a.company.localeCompare(b.company));
-    case "newest":
-    default:
-      return copy.sort(
-        (a, b) => new Date(b.postedDate) - new Date(a.postedDate),
-      );
-  }
-}
-
-function getVisibleJobs() {
-  const q = searchInput?.value ?? "";
-  const sortKey = sortSelect?.value ?? "newest";
-  return sortJobs(filterJobs(allJobs, q), sortKey);
-}
-
-function syncLayout() {
-  if (!root || !listPanelEl || !jobListEl || !detailShell) return;
-
-  const hasSelection = selectedJob != null;
-
-  if (hasSelection) {
-    root.dataset.layout = "split";
-    root.className = SPLIT_BOARD;
-    listPanelEl.className = SPLIT_PANEL;
-    jobListEl.className = SPLIT_JOBLIST;
-    detailShell.className = SPLIT_DETAIL;
-    detailShell.removeAttribute("hidden");
-    detailShell.setAttribute("aria-hidden", "false");
-  } else {
-    root.dataset.layout = "list";
-    root.className = LIST_BOARD;
-    listPanelEl.className = LIST_PANEL;
-    jobListEl.className = LIST_JOBLIST;
-    detailShell.className = LIST_DETAIL;
-    detailShell.setAttribute("hidden", "");
-    detailShell.setAttribute("aria-hidden", "true");
-  }
-}
-
-function clearList() {
-  jobListEl.replaceChildren();
-}
-
-function renderList(jobs) {
-  if (selectedJob) {
-    const fresh = jobs.find((j) => j.id === selectedJob.id);
-    if (!fresh) {
-      selectedJob = null;
-    } else {
-      selectedJob = fresh;
-    }
-  }
-
-  syncLayout();
-  clearList();
-
-  if (jobs.length === 0) {
-    const empty = document.createElement("div");
-    empty.className = "no-results !py-8 !shadow-none";
-    empty.innerHTML =
-      "<h3 class=\"!mb-2\">No matches</h3><p class=\"!mb-0\">Try a different search or sort option.</p>";
-    jobListEl.append(empty);
-    selectedJob = null;
-    syncLayout();
-    jobDetailContent?.replaceChildren();
-    return;
-  }
-
-  const inSplit = selectedJob != null;
-
-  jobs.forEach((job) => {
-    const isPaid = job.stipend > 0;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = inSplit
-      ? "job-card job-card--list"
-      : "job-card job-card--browse";
-    btn.dataset.jobId = String(job.id);
-
-    const isActive = inSplit && selectedJob && job.id === selectedJob.id;
-    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
-    if (isActive) btn.classList.add("is-active");
-
-    const title = document.createElement("h2");
-    title.className = "job-title";
-    title.textContent = job.title;
-
-    const company = document.createElement("div");
-    company.className = "company-name";
-    company.textContent = job.company;
-
-    const details = document.createElement("div");
-    details.className = "details";
-    details.textContent = `${job.location} • ${formatDate(job.postedDate)}`;
-
-    const stipend = document.createElement("div");
-    stipend.className = `stipend${isPaid ? "" : " stipend--unpaid"}`;
-    stipend.textContent = isPaid ? `$${job.stipend.toLocaleString()}` : "Unpaid";
-
-    const badge = document.createElement("span");
-    badge.className = `badge ${isPaid ? "badge-paid" : "badge-unpaid"}`;
-    badge.textContent = isPaid ? "Paid" : "Unpaid";
-
-    btn.append(title, company, details, stipend, badge);
-    btn.addEventListener("click", () => selectJob(job.id));
-    jobListEl.append(btn);
+  const btn = document.getElementById("theme-toggle");
+  btn?.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    setTheme(current === "light" ? "dark" : "light");
   });
-
-  if (selectedJob) {
-    renderDetail(selectedJob);
-  } else {
-    jobDetailContent?.replaceChildren();
-  }
 }
 
-function selectJob(id) {
-  const jobs = getVisibleJobs();
-  const job = jobs.find((j) => j.id === id);
-  if (!job) return;
-  selectedJob = job;
-  renderList(jobs);
+function markActiveNav() {
+  const page = document.body.dataset.page || "home";
+  document.querySelectorAll("[data-nav]").forEach((link) => {
+    if (link.dataset.nav === page) link.classList.add("active");
+  });
 }
 
-function closeDetail() {
-  selectedJob = null;
-  renderList(getVisibleJobs());
+function renderEmpty(container, message) {
+  container.innerHTML = `<article class="empty-state"><p>${message}</p></article>`;
 }
 
-function renderDetail(job) {
-  if (!jobDetailContent) return;
+function initLearningPage() {
+  const grid = document.getElementById("track-grid");
+  const search = document.getElementById("track-search");
+  if (!grid || !search) return;
 
-  jobDetailContent.replaceChildren();
+  const render = () => {
+    const q = search.value.trim().toLowerCase();
+    const list = trackData.filter((t) => t.toLowerCase().includes(q));
+    if (!list.length) return renderEmpty(grid, "No track matched your search.");
 
-  const isPaid = job.stipend > 0;
+    grid.innerHTML = list
+      .map(
+        (track) => `
+          <article class="feature-card">
+            <h3>${track}</h3>
+            <p>Focused roadmap, curated resources, and practical milestones.</p>
+          </article>
+        `,
+      )
+      .join("");
+  };
 
-  const closeRow = document.createElement("div");
-  closeRow.className =
-    "mb-4 flex items-start justify-end gap-3 sm:absolute sm:right-4 sm:top-4 sm:z-10 sm:mb-0";
-
-  const closeBtn = document.createElement("button");
-  closeBtn.type = "button";
-  closeBtn.className =
-    "inline-flex h-10 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900";
-  closeBtn.setAttribute("aria-label", "Close job details and return to list");
-  closeBtn.innerHTML =
-    "<span aria-hidden=\"true\" class=\"text-lg leading-none\">×</span><span class=\"ml-1.5 hidden sm:inline\">Close</span>";
-  closeBtn.addEventListener("click", closeDetail);
-  closeRow.append(closeBtn);
-
-  const header = document.createElement("header");
-  header.className = "job-detail-header sm:pr-24";
-
-  const h = document.createElement("h2");
-  h.className = "job-detail-title";
-  h.textContent = job.title;
-
-  const meta = document.createElement("div");
-  meta.className = "job-detail-meta";
-  meta.innerHTML = `
-    <span class="job-detail-company">${escapeHtml(job.company)}</span>
-    <span class="job-detail-dot" aria-hidden="true">·</span>
-    <span class="job-detail-location">${escapeHtml(job.location)}</span>
-    <span class="job-detail-dot" aria-hidden="true">·</span>
-    <span class="job-detail-posted">Posted ${escapeHtml(formatDate(job.postedDate))}</span>
-  `;
-
-  const stipRow = document.createElement("div");
-  stipRow.className = "job-detail-stipend-row";
-  const stip = document.createElement("span");
-  stip.className = `job-detail-stipend${isPaid ? "" : " job-detail-stipend--muted"}`;
-  stip.textContent = isPaid
-    ? `$${job.stipend.toLocaleString()} stipend`
-    : "Unpaid position";
-  const badge = document.createElement("span");
-  badge.className = `badge ${isPaid ? "badge-paid" : "badge-unpaid"}`;
-  badge.textContent = isPaid ? "Paid" : "Unpaid";
-  stipRow.append(stip, badge);
-
-  header.append(h, meta, stipRow);
-
-  const actions = document.createElement("div");
-  actions.className = "job-detail-actions";
-  const applyBtn = document.createElement("a");
-  applyBtn.className = "btn btn-apply";
-  applyBtn.textContent = "Apply now";
-  applyBtn.href = job.applyUrl || "#";
-  if (!job.applyUrl) {
-    applyBtn.addEventListener("click", (e) => e.preventDefault());
-    applyBtn.title = "Application URL not set for this listing (demo)";
-  }
-  applyBtn.rel = "noopener noreferrer";
-  actions.append(applyBtn);
-
-  const body = document.createElement("div");
-  body.className = "job-detail-body";
-  const h3 = document.createElement("h3");
-  h3.className = "job-detail-section-title";
-  h3.textContent = "Job description";
-  const desc = document.createElement("div");
-  desc.className = "job-detail-description prose-flow";
-  desc.innerHTML = markdownLite(buildDescription(job));
-  body.append(h3, desc);
-
-  jobDetailContent.append(closeRow, header, actions, body);
+  search.addEventListener("input", render);
+  render();
 }
 
-function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+function initInternshipsPage() {
+  const grid = document.getElementById("internship-grid");
+  const search = document.getElementById("internship-search");
+  const location = document.getElementById("internship-location");
+  if (!grid || !search || !location) return;
+
+  const render = () => {
+    const q = search.value.trim().toLowerCase();
+    const loc = location.value.trim().toLowerCase();
+
+    const list = internshipData.filter((item) => {
+      const roleMatch =
+        item.title.toLowerCase().includes(q) || item.company.toLowerCase().includes(q);
+      const locationMatch = !loc || item.location.toLowerCase().includes(loc);
+      return roleMatch && locationMatch;
+    });
+
+    if (!list.length) return renderEmpty(grid, "No internships found. Try different filters.");
+
+    grid.innerHTML = list
+      .map(
+        (item) => `
+          <article class="listing-card">
+            <div class="listing-top">
+              <h3>${item.title}</h3>
+              <span class="badge ${item.stipend > 0 ? "badge-paid" : "badge-unpaid"}">
+                ${item.stipend > 0 ? "Paid" : "Unpaid"}
+              </span>
+            </div>
+            <p class="meta">${item.company} • ${item.location}</p>
+            <p class="meta">Posted ${new Date(item.postedDate).toLocaleDateString()}</p>
+            <div class="listing-actions">
+              <button class="btn">Apply</button>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
+  };
+
+  search.addEventListener("input", render);
+  location.addEventListener("input", render);
+  render();
 }
 
-function refresh() {
-  renderList(getVisibleJobs());
+function initJobsPage() {
+  const grid = document.getElementById("jobs-grid");
+  const roleInput = document.getElementById("job-role-search");
+  const levelFilter = document.getElementById("job-level-filter");
+  const locationInput = document.getElementById("job-location-search");
+  if (!grid || !roleInput || !levelFilter || !locationInput) return;
+
+  const render = () => {
+    const role = roleInput.value.trim().toLowerCase();
+    const level = levelFilter.value;
+    const location = locationInput.value.trim().toLowerCase();
+
+    const list = jobsData.filter((job) => {
+      const roleMatch = !role || job.title.toLowerCase().includes(role);
+      const levelMatch = !level || job.level === level;
+      const locMatch = !location || job.location.toLowerCase().includes(location);
+      return roleMatch && levelMatch && locMatch;
+    });
+
+    if (!list.length) return renderEmpty(grid, "No jobs found. Try changing filters.");
+
+    grid.innerHTML = list
+      .map(
+        (job) => `
+          <article class="listing-card">
+            <div class="listing-top">
+              <h3>${job.title}</h3>
+              <span class="pill">${job.level}</span>
+            </div>
+            <p class="meta">${job.company} • ${job.location}</p>
+            <div class="listing-actions">
+              <button class="btn btn-secondary">View details</button>
+            </div>
+          </article>
+        `,
+      )
+      .join("");
+  };
+
+  roleInput.addEventListener("input", render);
+  levelFilter.addEventListener("change", render);
+  locationInput.addEventListener("input", render);
+  render();
 }
 
-searchInput?.addEventListener("input", () => {
-  refresh();
-});
+function boot() {
+  setupTheme();
+  markActiveNav();
+  const page = document.body.dataset.page;
+  if (page === "learn") initLearningPage();
+  if (page === "internships") initInternshipsPage();
+  if (page === "jobs") initJobsPage();
+}
 
-sortSelect?.addEventListener("change", () => {
-  refresh();
-});
-
-refresh();
+boot();
