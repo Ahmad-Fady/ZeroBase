@@ -1,11 +1,38 @@
-/* /* Start Variables */ */
-/* :root { */
-/*   --main-color: #10cab7; */
-/*   --secondary-color: #2c4755; */
-/*   --section-padding: 60px; */
-/*   --section-background: #f6f6f6; */
-/*   --main-duration: 0.5s; */
-/* } */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f9;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --border: #e2e8f0;
+  --shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  --radius: 16px;
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --surface: #111a2f;
+  --surface-muted: #16223d;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --border: #233251;
+  --shadow: 0 6px 24px rgba(2, 6, 23, 0.45);
+}
+
+/* Start Variables */
+:root {
+  --primary: #111a2f;
+  --secondary: #16223d;
+  --accent: #2563eb;
+  /* --accent: hsl(174, 85%, 43%); */
+  /* --border: var(--accent); */
+  /* --section-padding: 60px; */
+  /* --main-duration: 0.5s; */
+}
 /* End Variables */
 
 /* Start Global Rules */
@@ -13,6 +40,8 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 html {
   scroll-behavior: smooth;
@@ -46,33 +75,35 @@ html {
 
 
 /* CSS: Making it look like a modern job board */
-:root {
-  /* --primary: #2557a7; /* Indeed Blue */ 
-  /* --bg: #f3f2f1; */
-  /* --text: #2d2d2d; */
-  --primary: yellow; /* Indeed Blue */
-  --bg: #2A1B7D;
-  --text: white;
-  --border: magenta;
-}
+/* :root { */
+/*   --primary: #2557a7; */
+/*   --bg: #f3f2f1; */
+/*   --text: #2d2d2d; */
+/*   --primary: yellow; */
+/*   --secondary: #2A1B7D; */
+/*   --accent: white; */
+/*   --border: magenta; */
+/* } */
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
 
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
+  background-color: hsl(from var(--primary) h s calc(l - 0));
+  /* background-color: yellow; */
+  color: white;
 }
 
+/* body .dark-mode{ */
+/* } */
+
+/* body .dark-vibrant{ */
+/* } */
+
 header {
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid hsl(from var(--primary) h s calc(l - 0));
   padding-left: 10px;
   padding-right: 10px;
-  background: hsl(from var(--bg) h s calc(l - 10));
+  background: hsl(from var(--primary) h s calc(l + 0.1));
   /* width: 100%; */
   height: 70px;
   margin-bottom: 30px;
@@ -94,7 +125,7 @@ header {
 /* } */
 
 .header-right a {
-  background: var(--border);
+  background: var(--accent);
   border-radius: 8px;
   size: 20px;
   font-weight: bold;
@@ -110,7 +141,7 @@ header {
 
 /* Toolbar for Sorting */
 .toolbar {
-  background: hsl(from var(--bg) h s calc(l + 10));
+  background: hsl(from var(--primary) h s calc(l + 5));
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -122,15 +153,24 @@ header {
 
 select, input {
   padding: 10px;
-  border: 1px solid #ccc;
+  background-color: hsl(from var(--primary) h s calc(l + 5));;
+  border: 1px solid var(--primary);
   border-radius: 4px;
   font-size: 16px;
 }
 
+/* .jobs-container { */
+/**/
+/* } */
+/**/
+/* .jobs-holder { */
+/**/
+/* } */
+
 /* Job Card Styling */
 .job-card {
-  background: hsl(from var(--bg) h s calc(l + 10));
-  border: 1px solid #e4e2e0;
+  background: hsl(from var(--primary) h s calc(l + 5));
+  border: 2px solid var(--secondary);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 15px;
@@ -139,14 +179,14 @@ select, input {
 }
 
 .job-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: var(--border);
+  box-shadow: 0 4px 12px white;
+  border-color: var(--accent);
   transform: scale(1.01);
   transition: 0.5s;
 }
 
 .job-title {
-  color: var(--primary);
+  color: var(--accent);
   margin: 0 0 5px 0;
   font-size: 1.25rem;
 }
@@ -185,6 +225,5 @@ select, input {
   padding: 50px;
   color: #666;
 }
-
 
 
