@@ -38,7 +38,18 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
+# Python bytecode
+__pycache__/
+config/__pycache__/
+*.py[cod]
+*$py.class
+
+# Django specific
+db.sqlite3
+local_settings.py
+
 # custom
 venv/
 data/
 requirments-dev.txt
+
