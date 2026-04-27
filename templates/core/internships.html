@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GradJobs | Internships</title>
+    <link href="../static/main.css" rel="stylesheet" />
+  </head>
+  <body data-page="internships">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="./index.html" class="brand">GradJobs</a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="./index.html" data-nav="home">Home</a>
+          <a href="./learn.html" data-nav="learn">Learn</a>
+          <a href="./internships.html" data-nav="internships">Internships</a>
+          <a href="./jobs.html" data-nav="jobs">Jobs</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">
+          <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__text">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      <section class="page-head">
+        <p class="eyebrow">Find Internship</p>
+        <h1>Internship opportunities for early careers</h1>
+        <p>Filter internships by title/company and location to find the best match quickly.</p>
+      </section>
+
+      <section class="filter-grid">
+        <div>
+          <label for="internship-search">Role or company</label>
+          <input id="internship-search" type="search" placeholder="e.g. frontend, data, Google..." />
+        </div>
+        <div>
+          <label for="internship-location">Location</label>
+          <input id="internship-location" type="search" placeholder="e.g. Remote, CA, New York..." />
+        </div>
+      </section>
+
+      <section id="internship-grid" class="listing-grid" aria-live="polite"></section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>GradJobs Internships</p>
+        <p>Fast discovery for top internship openings.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="../static/main.js"></script>
+  </body>
+</html>

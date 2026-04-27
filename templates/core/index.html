@@ -1,45 +1,39 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradJobs | Find Your First Internship</title>
-    <link href="{% static 'core/css/main.css' %}" rel="stylesheet" />
-  </head>
-  <body>
-    <header>
-      <div class="header-container">
-        <div class="header-left">
-          <h1>🎓 GradJobs</h1>
-          <p>For best enterprise education</p>
-        </div>
-        <div class="header-right">
-          <a href="/signin/">sign in</a>
-        </div>
+{% extends 'core/base.html' %}
+{% block content %}
+    <main>
+      <section class="hero container">
+        <p class="eyebrow">Career Platform For New Graduates</p>
+        <h1>Learn faster, apply smarter, and land your next role.</h1>
+        <p class="hero-subtitle">
+          Build your roadmap, discover internships, and browse full-time jobs in a single clean workflow.
+        </p>
+      </section>
+
+      <section class="container choice-grid" aria-label="Main options">
+        <a class="choice-card" href="./learn.html">
+          <h2>Learn</h2>
+          <p>Explore software engineering tracks and filter paths based on your goals.</p>
+          <span class="choice-cta">Open Learning Paths</span>
+        </a>
+
+        <a class="choice-card" href="./internships.html">
+          <h2>Find Internship</h2>
+          <p>Search internships by role and location with fast filters and cleaner listings.</p>
+          <span class="choice-cta">Browse Internships</span>
+        </a>
+
+        <a class="choice-card" href="./jobs.html">
+          <h2>Find Job</h2>
+          <p>Review entry-level and junior jobs by role, seniority, and location.</p>
+          <span class="choice-cta">Explore Jobs</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>GradJobs</p>
+        <p>Focused, modern recruiting experience for students and recruiters.</p>
       </div>
-    </header>
-
-    <div id="app" class="container">
-      <div class="toolbar">
-        <input type="text" v-model="searchQuery" placeholder="Search job titles...">
-
-        <label for="sort">Sort by:</label>
-        <select id="sort" v-model="sortKey">
-          <option value="newest">Newest First</option>
-          <option value="money-high">Stipend: High to Low</option>
-          <option value="money-low">Stipend: Low to High</option>
-          <option value="company">Company Name (A-Z)</option>
-        </select>
-      </div>
-
-      <div class="jobs-container">
-      <!-- This jobs-holder is where the job-card(s) will be injected -->
-      <div id="jobs-holder"></div>
-      <div id="jobs-preview"></div>
-      </div>
-    </div>
-
-    <script type="module" src="{% static 'core/js/main.js' %}"></script>
-  </body>
-</html>
+    </footer>
+{% endblock content %}
