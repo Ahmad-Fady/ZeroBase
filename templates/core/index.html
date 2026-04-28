@@ -1,4 +1,6 @@
 {% extends 'core/base.html' %}
+{% block data_page %}"home"{% endblock data_page %}
+{% block title %}GradJobs | Career Launch Platform{% endblock title %}
 {% block content %}
     <main>
       <section class="hero container">
@@ -10,19 +12,19 @@
       </section>
 
       <section class="container choice-grid" aria-label="Main options">
-        <a class="choice-card" href="./learn.html">
+        <a class="choice-card" href="{% url 'core:learn' %}">
           <h2>Learn</h2>
           <p>Explore software engineering tracks and filter paths based on your goals.</p>
           <span class="choice-cta">Open Learning Paths</span>
         </a>
 
-        <a class="choice-card" href="./internships.html">
+        <a class="choice-card" href="{% url 'core:internships' %}">
           <h2>Find Internship</h2>
           <p>Search internships by role and location with fast filters and cleaner listings.</p>
           <span class="choice-cta">Browse Internships</span>
         </a>
 
-        <a class="choice-card" href="./jobs.html">
+        <a class="choice-card" href="{% url 'core:jobs' %}">
           <h2>Find Job</h2>
           <p>Review entry-level and junior jobs by role, seniority, and location.</p>
           <span class="choice-cta">Explore Jobs</span>

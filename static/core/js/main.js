@@ -1,5 +1,4 @@
 import internshipData from "./data.json" with { type: "json" };
-
 const trackData = [
   "Frontend",
   "Backend",
