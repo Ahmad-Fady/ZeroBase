@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # other apps
     "core",
     "accounts",
+    # third-party
     "django_extensions",
     # default apps
     "django.contrib.admin",
@@ -127,4 +128,4 @@ STATICFILES_DIRS = [
         BASE_DIR / "static"
 ]
 
-
+AUTH_USER_MODEL = "accounts.User"

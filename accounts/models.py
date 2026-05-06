@@ -1,51 +1,212 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.utils.translation import gettext_lazy as _
 
-class City(models.Model):
-    name = models.CharField(max_length=50)
+# Create your models here.
+class UserManager(BaseUserManager):
+
+    def create_user(self, email, password=None):
+        """
+        Creates and saves a User with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+     
+        return user
+
+    def create_student_user(self, email, first_name, second_name, phone_number, password=None, password2=None):
+        """
+        Creates and saves a User with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name = first_name,
+            second_name = second_name,
+            phone_number = phone_number,
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_company_user(self, email, company_name, description, password=None, password2=None):
+        """
+        Creates and saves a User with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            company_name = company_name,
+            description = description,
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_staffuser(self, email, password):
+        """
+        Creates and saves a staff user with the given email and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.staff = True
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password):
+        """
+        Creates and saves a superuser with the given email and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.staff = True
+        user.admin = True
+        user.save(using=self._db)
+        return user
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=True)
+    staff = models.BooleanField(default=False) # a admin user; non super-user
+    admin = models.BooleanField(default=False) # a superuser
+    
+    objects = UserManager()
+    # notice the absence of a "Password field", that is built in.
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [] # Email & Password are required by default.
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
 
     def __str__(self):
-        return self.name
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        return self.staff
+
+    @property
+    def is_admin(self):
+        "Is the user a admin member?"
+        return self.admin
+    
+
+# Here we use Inheritance for creating the multi-users
+
+class Company(User):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE,
+        parent_link=True,
+        related_name='company',
+    )
+    company_name = models.CharField(max_length=256)
+    description = models.TextField(max_length=1024)
 
 
-class Location(models.Model):
-    name = models.CharField(max_length=50)
-    city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='locations')
+    class Meta:
+        verbose_name = _('Company')
+        verbose_name_plural = _('Companys')
 
-    def __str__(self):
-        return f"{self.name} ({self.city.name})"
+class Student(User):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE,
+        parent_link=True,
+        related_name='student',
+    )
+    first_name = models.CharField(max_length=256)
+    second_name = models.CharField(max_length=256)
+    phone_number = models.CharField(max_length=256)
+
+    class Meta:
+        verbose_name = _('Student')
+        verbose_name_plural = _('Students')
+
+# class City(models.Model):
+#     name = models.CharField(max_length=50)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Location(models.Model):
+#     name = models.CharField(max_length=50)
+#     city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='locations')
+#
+#     def __str__(self):
+#         return f"{self.name} ({self.city.name})"
+#
 
 
-class Address(models.Model):
-    city = models.ForeignKey('City', on_delete=models.PROTECT)
-    location = models.ForeignKey('Location', on_delete=models.PROTECT)
-
-    def __str__(self) -> str:
-        return f"{self.location.name}, {self.city.name}"
-
-    def clean(self):
-        if self.location.city != self.city:
-            raise ValidationError("Location does not belong to the selected city")
-
-
-class User(models.Model):
-    first_name = models.CharField(max_length=50)
-    second_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
-    email = models.CharField()
-    password = models.CharField(max_length=150)
-    # One-to-One because a User usually has only one primary address
-    address = models.OneToOneField(Address, on_delete=models.PROTECT)
-
-class Company(models.Model):
-    company_name = models.CharField(max_length=50)
-    description = models.CharField(max_length=1024, blank=True, null=True)
-    email = models.EmailField()
-    password = models.CharField(max_length=150)
-    website_url = models.URLField()
-    market_share = models.BigIntegerField()
-    company_created_at = models.DateField()
-    # Foreign Key because a company can have multiple office addresses
-    city = models.ForeignKey('City', on_delete=models.PROTECT)
-    location = models.ForeignKey('Location', on_delete=models.PROTECT)
-    addresses = models.ManyToManyField(Address, related_name="companies")
+# class CustomUser(AbstractUser):
+#     is_student = models.BooleanField(default=False)
+#     is_company = models.BooleanField(default=False)
+#
+# class Student(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
+#     second_name = models.CharField(max_length=50)
+#     email = models.EmailField(unique=True)
+#     # One-to-One because a User usually has only one primary address
+#     # address = models.OneToOneField(Address, on_delete=models.PROTECT)
+#
+# class Company(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='company_profile')
+#     company_name = models.CharField(max_length=50)
+#     description = models.TextField(max_length=1024, blank=True, null=True)
+#     email = models.EmailField(unique=True)
+#     website_url = models.URLField()
+#     # market_share = models.BigIntegerField()
+#     # company_created_at = models.DateField()
+#     # Foreign Key because a company can have multiple office addresses
+#     city = models.ForeignKey('City', on_delete=models.PROTECT)
+#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
+#
+#
+#
+# class Address(models.Model):
+#     city = models.ForeignKey('City', on_delete=models.PROTECT)
+#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
+#     addresses = models.ManyToManyField(Company, related_name="companies")
+#     def __str__(self) -> str:
+#         return f"{self.location.name}, {self.city.name}"
+#
+#     def clean(self):
+#         if self.location.city != self.city:
+#             raise ValidationError("Location does not belong to the selected city")

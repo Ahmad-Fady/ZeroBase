@@ -2,4 +2,5 @@ django
 django-stubs
 django-extensions
 pydotplus
-# pygraphviz
+django_crispy_forms
+crispy_bootstrap5
