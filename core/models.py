@@ -1,8 +1,13 @@
 from django.db import models
+from accounts.models import Company, City, Location
 # from django.core.exceptions import ValidationError
 
 
-# class JobOffer(models.Model):
-#     title = models.CharField(max_length=100)
-#     # Direct link to the specific address where the job is located
-#     address = models.ForeignKey(Address, on_delete=models.CASCADE)
+class InternshipOffer(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    date = models.DateField()
+    contact_info = models.TextField(max_length=1024)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)

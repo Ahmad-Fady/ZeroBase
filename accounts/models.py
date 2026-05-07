@@ -4,6 +4,22 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
+
+class City(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=50)
+    city = models.ForeignKey(City, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.name} ({self.city.name})"
+
+
 class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None):
@@ -18,10 +34,10 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
-     
+
         return user
 
-    def create_student_user(self, email, first_name, second_name, phone_number, password=None, password2=None):
+    def create_student_user(self, email, first_name, second_name, phone_number, city, location, password=None, password2=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -33,13 +49,15 @@ class UserManager(BaseUserManager):
             first_name = first_name,
             second_name = second_name,
             phone_number = phone_number,
+            city = city,
+            location = location,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_company_user(self, email, company_name, description, password=None, password2=None):
+    def create_company_user(self, email, company_name, description, city, location, password=None, password2=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -50,6 +68,8 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email),
             company_name = company_name,
             description = description,
+            city = city,
+            location = location,
         )
 
         user.set_password(password)
@@ -139,6 +159,8 @@ class Company(User):
     )
     company_name = models.CharField(max_length=256)
     description = models.TextField(max_length=1024)
+    city = models.ForeignKey('City', on_delete=models.PROTECT)
+    location = models.ForeignKey('Location', on_delete=models.PROTECT)
 
 
     class Meta:
@@ -154,26 +176,25 @@ class Student(User):
     first_name = models.CharField(max_length=256)
     second_name = models.CharField(max_length=256)
     phone_number = models.CharField(max_length=256)
+    city = models.ForeignKey('City', on_delete=models.PROTECT)
+    location = models.ForeignKey('Location', on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = _('Student')
         verbose_name_plural = _('Students')
 
-# class City(models.Model):
-#     name = models.CharField(max_length=50)
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# class Location(models.Model):
-#     name = models.CharField(max_length=50)
-#     city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='locations')
-#
-#     def __str__(self):
-#         return f"{self.name} ({self.city.name})"
-#
 
+
+# class Address(models.Model):
+#     addresses = models.ManyToManyField(Company, related_name="companies")
+#     city = models.ForeignKey('City', on_delete=models.PROTECT)
+#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
+#     def __str__(self) -> str:
+#         return f"{self.location.name}, {self.city.name}"
+#
+#     def clean(self):
+#         if self.location.city != self.city:
+#             raise ValidationError("Location does not belong to the selected city")
 
 # class CustomUser(AbstractUser):
 #     is_student = models.BooleanField(default=False)
@@ -200,13 +221,3 @@ class Student(User):
 #
 #
 #
-# class Address(models.Model):
-#     city = models.ForeignKey('City', on_delete=models.PROTECT)
-#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
-#     addresses = models.ManyToManyField(Company, related_name="companies")
-#     def __str__(self) -> str:
-#         return f"{self.location.name}, {self.city.name}"
-#
-#     def clean(self):
-#         if self.location.city != self.city:
-#             raise ValidationError("Location does not belong to the selected city")

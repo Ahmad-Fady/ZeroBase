@@ -1,11 +1,3 @@
-# from django.contrib import admin
-# from .models import *
-
-# # Register your models here.
-# admin.site.register(User)
-# admin.site.register(Organization)
-# admin.site.register(Candidate)
-
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -99,7 +91,15 @@ class AddStudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ('email','first_name', 'second_name','phone_number')
+        fields = ('email', 'first_name', 'second_name','phone_number', 'city', 'location',)
+
+    # this function checks that the location is in the right city
+    def clean_location(self):
+        city = self.cleaned_data['city']
+        location = self.cleaned_data['location']
+        if location.city != city:
+            raise forms.ValidationError("The location is not in this city")
+        return location
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -126,7 +126,7 @@ class UpdateStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = (
-            'email', 'password','first_name', 'second_name', 'phone_number'
+            'email', 'password','first_name', 'second_name', 'phone_number', 'city', 'location',
         )
 
     def clean_password(self):
@@ -137,11 +137,11 @@ class StudentAdmin(BaseUserAdmin):
     form = UpdateStudentForm
     add_form = AddStudentForm
 
-    list_display = ('email','first_name', 'second_name', 'phone_number')
+    list_display = ('email','first_name', 'second_name', 'phone_number', 'city', 'location',)
     list_filter = ()
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'second_name', 'phone_number')}),
+        ('Personal info', {'fields': ('first_name', 'second_name', 'phone_number', 'city', 'location',)}),
         # ('Permissions', {'fields': ('is_active', 'staff','admin')}),
     )
     add_fieldsets = (
@@ -150,7 +150,7 @@ class StudentAdmin(BaseUserAdmin):
             {
                 'classes': ('wide',),
                 'fields': (
-                    'email','first_name', 'second_name', 'phone_number', 'password1',
+                    'email','first_name', 'second_name', 'phone_number', 'city', 'location', 'password1',
                     'password2'
                 )
             }
@@ -173,7 +173,7 @@ class AddCompanyForm(forms.ModelForm):
 
     class Meta:
         model = Company
-        fields = ('email','company_name','description')
+        fields = ('email','company_name','description', 'city', 'location',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -200,7 +200,7 @@ class UpdateCompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = (
-            'email', 'password','company_name','description'
+            'email', 'password','company_name','description', 'city', 'location',
         )
 
     def clean_password(self):
@@ -215,7 +215,7 @@ class CompanyAdmin(BaseUserAdmin):
     list_filter = ()
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('company_name', 'description')}),
+        ('Personal info', {'fields': ('company_name', 'description', 'city', 'location',)}),
         # ('Permissions', {'fields': ('is_active', 'staff','admin')}),
     )
     add_fieldsets = (
@@ -237,3 +237,7 @@ class CompanyAdmin(BaseUserAdmin):
 admin.site.register(User,UserAdmin)
 admin.site.register(Student,StudentAdmin)
 admin.site.register(Company,CompanyAdmin)
+
+
+# admin.site.register(Student)
+# admin.site.register(Company)
