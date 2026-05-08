@@ -72,7 +72,7 @@ select {
   z-index: 40;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1.3px solid var(--border);
 }
 
 .nav-wrap {
@@ -109,7 +109,7 @@ select {
 }
 
 .theme-toggle {
-  border: 1px solid var(--border);
+  border: 1.3px solid var(--border);
   background: var(--surface);
   color: var(--text);
   border-radius: 999px;
@@ -161,7 +161,7 @@ h1 {
 
 .choice-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.3px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem;
   box-shadow: var(--shadow);
@@ -203,7 +203,7 @@ h1 {
 .filter-bar,
 .filter-grid {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.3px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1rem;
@@ -230,7 +230,7 @@ label {
 input,
 select {
   width: 100%;
-  border: 1px solid var(--border);
+  border: 1.3px solid var(--border);
   background: var(--surface-muted);
   color: var(--text);
   border-radius: 12px;
@@ -255,7 +255,7 @@ select:focus {
 .listing-card,
 .empty-state {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.3px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem;
   box-shadow: var(--shadow);
@@ -342,7 +342,7 @@ select:focus {
 }
 
 .site-footer {
-  border-top: 1px solid var(--border);
+  border-top: 1.3px solid var(--border);
   margin-top: 2.2rem;
   background: var(--surface);
 }

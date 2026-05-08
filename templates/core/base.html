@@ -4,13 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block title %}ZeroBase{% endblock title %}</title>
     <link href="{% static 'core/css/main.css' %}" rel="stylesheet" />
   </head>
   <body data-page={% block data_page %}{% endblock data_page %}>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a href="{% url 'core:home' %}" class="brand">GradJobs</a>
+        <a href="{% url 'core:home' %}" class="brand">ZeroBase</a>
         <nav class="nav-links" aria-label="Primary">
           <a href="{% url 'core:home' %}" data-nav="home">Home</a>
           <a href="{% url 'core:learn' %}" data-nav="learn">Learn</a>
