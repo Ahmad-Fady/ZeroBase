@@ -1,0 +1,19 @@
+/* .offer-container { */
+/* } */
+.offer-card {
+  background-color: var(--white-item);
+  box-shadow: 50px;
+  /* width: 1700px; */
+  height: 180px;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 0px;
+  transition: all 0.1s ease-in-out;
+}
+
+.offer-card:hover {
+  border: 1.4px solid var(--blue);
+  background-color: var(--white-item);
+  /* width: 700px; */
+}
