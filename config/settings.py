@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     "accounts",
     # third-party
     "django_extensions",
+    "crispy_forms",
+    "crispy_bootstrap5",
     # default apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -129,3 +131,8 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
+LOGIN_REDIRECT_URL = "core:home"
+LOGOUT_REDIRECT_URL = "core:home"
+
+CRISPY_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

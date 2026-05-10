@@ -175,6 +175,13 @@ class AddCompanyForm(forms.ModelForm):
         model = Company
         fields = ('email','company_name','description', 'city', 'location',)
 
+    def clean_location(self):
+        city = self.cleaned_data['city']
+        location = self.cleaned_data['location']
+        if location.city != city:
+            raise forms.ValidationError("The location is not in this city")
+        return location
+
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
@@ -211,7 +218,7 @@ class CompanyAdmin(BaseUserAdmin):
     form = UpdateCompanyForm
     add_form = AddCompanyForm
 
-    list_display = ('email','company_name','description')
+    list_display = ('email','company_name','description', 'city', 'location',)
     list_filter = ()
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -224,7 +231,7 @@ class CompanyAdmin(BaseUserAdmin):
             {
                 'classes': ('wide',),
                 'fields': (
-                    'email','company_name','description', 'password1',
+                    'email','company_name','description', 'city', 'location', 'password1',
                     'password2'
                 )
             }

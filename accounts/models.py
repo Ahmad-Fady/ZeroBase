@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 
@@ -56,7 +55,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
     def create_company_user(self, email, company_name, description, city, location, password=None, password2=None):
         """
         Creates and saves a User with the given email and password.
@@ -147,7 +146,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         "Is the user a admin member?"
         return self.admin
-    
+
+    @property
+    def is_student(self):
+        try:
+            return self.student is not None
+        except Student.DoesNotExist:
+            return False
+
+    @property
+    def is_company(self):
+        try:
+            return self.company is not None
+        except Company.DoesNotExist:
+            return False
 
 # Here we use Inheritance for creating the multi-users
 
@@ -182,42 +194,3 @@ class Student(User):
     class Meta:
         verbose_name = _('Student')
         verbose_name_plural = _('Students')
-
-
-
-# class Address(models.Model):
-#     addresses = models.ManyToManyField(Company, related_name="companies")
-#     city = models.ForeignKey('City', on_delete=models.PROTECT)
-#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
-#     def __str__(self) -> str:
-#         return f"{self.location.name}, {self.city.name}"
-#
-#     def clean(self):
-#         if self.location.city != self.city:
-#             raise ValidationError("Location does not belong to the selected city")
-
-# class CustomUser(AbstractUser):
-#     is_student = models.BooleanField(default=False)
-#     is_company = models.BooleanField(default=False)
-#
-# class Student(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='student_profile')
-#     second_name = models.CharField(max_length=50)
-#     email = models.EmailField(unique=True)
-#     # One-to-One because a User usually has only one primary address
-#     # address = models.OneToOneField(Address, on_delete=models.PROTECT)
-#
-# class Company(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='company_profile')
-#     company_name = models.CharField(max_length=50)
-#     description = models.TextField(max_length=1024, blank=True, null=True)
-#     email = models.EmailField(unique=True)
-#     website_url = models.URLField()
-#     # market_share = models.BigIntegerField()
-#     # company_created_at = models.DateField()
-#     # Foreign Key because a company can have multiple office addresses
-#     city = models.ForeignKey('City', on_delete=models.PROTECT)
-#     location = models.ForeignKey('Location', on_delete=models.PROTECT)
-#
-#
-#

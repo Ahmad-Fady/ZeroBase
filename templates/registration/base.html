@@ -5,11 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}ZeroBase{% endblock title %}</title>
-    <!-- <link href="{% static 'core/css/main.css' %}" rel="stylesheet" /> -->
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet" />
   </head>
-  <body data-page={% block data_page %}{% endblock data_page %}>
+  <body>
+    <div class="container">
     {% block content %}
     {% endblock content %}
-    <script type="module" src="{% static 'core/js/main.js' %}"></script>
+    </div>
+    <script type="module" src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
   </body>
 </html>

@@ -21,6 +21,7 @@ from . import views
 app_name = "accounts"
 urlpatterns = [
     path("", include("django.contrib.auth.urls")),
+    # path("login", views.StudentSignUpView.as_view(), name="login"),
     path("signup/student/", views.StudentSignUpView.as_view(), name="student_signup"),
     path("signup/company/", views.CompanySignUpView.as_view(), name="company_signup"),
 ]
