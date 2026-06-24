@@ -16,10 +16,15 @@ Including another URLconf
 """
 
 from django.urls import path
-from .views import *
+from . import views
 
 app_name = "core"
 urlpatterns = [
-    path("", ListRecentOffers.as_view(), name="home"),
-    # path("offers/", ListRecent.as_view(), name="offers"),
+    # path("", views.ListRecentOffers.as_view(), name="home"),
+    path("", views.index, name="home"),
+    # path("internships", views.internships, name="internships"),
+    path("internships", views.ListRecentOffers.as_view(), name="internships"),
+    path("jobs", views.jobs, name="jobs"),
+    path("learn", views.learn, name="learn"),
+    path('search/', views.InternshipFilteredListView.as_view(), name='internship_search'),
 ]

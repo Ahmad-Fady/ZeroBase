@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% block title %}GradJobs | Learning Paths{% endblock title %}
+{% block data_page %}"learn"{% endblock data_page %}
+{% block content %}
+    <main class="container page-shell">
+      <section class="page-head">
+        <p class="eyebrow">Learning Path</p>
+        <h1>Choose a software engineering track</h1>
+        <p>Search and explore high-impact tracks to structure your study roadmap.</p>
+      </section>
+
+      <section class="filter-bar">
+        <label class="sr-only" for="track-search">Search tracks</label>
+        <input id="track-search" type="search" placeholder="Search track name..." />
+      </section>
+
+      <section id="track-grid" class="card-grid" aria-live="polite"></section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>GradJobs Learning</p>
+        <p>Discover, focus, and progress consistently.</p>
+      </div>
+    </footer>
+
+{% endblock content %}

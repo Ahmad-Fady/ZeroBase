@@ -7,8 +7,8 @@ def one_month_hence():
 
 
 class InternshipOffer(models.Model):
-    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
+    company = models.ForeignKey('accounts.Company', on_delete=models.CASCADE)
     description = models.TextField()
     date = models.DateField()
     # contact_info = models.TextField(max_length=1024)

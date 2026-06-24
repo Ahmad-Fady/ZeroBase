@@ -1,23 +1,41 @@
 {% extends 'core/base.html' %}
-{% load static %}
-    {% block css %}
-    <link href="{% static 'core/css/index.css' %}" rel="stylesheet" />
-    {% endblock %}
+{% block data_page %}"home"{% endblock data_page %}
+{% block title %}GradJobs | Career Launch Platform{% endblock title %}
 {% block content %}
-<div id="offer-container">
-    {% for offer in offers %}
-        <div class="offer-card">
-            <h3>{{ offer.title }}</h3>
-            <p>{{ offer.city }} - {{ offer.location }}</p>
-            <p>{{ offer.description }}</p>
-        </div>
-    {% endfor %}
-</div>
+    <main>
+      <section class="hero container">
+        <p class="eyebrow">Career Platform For New Graduates</p>
+        <h1>Learn faster, apply smarter, and land your next role.</h1>
+        <p class="hero-subtitle">
+          Build your roadmap, discover internships, and browse full-time jobs in a single clean workflow.
+        </p>
+      </section>
 
-{% if page_obj.has_next %}
-    <!-- This button points to the next page (e.g., ?page=2) -->
-    <button id="load-more" data-next-page="{{ page_obj.next_page_number }}">
-        Show 10 More
-    </button>
-{% endif %}
+      <section class="container choice-grid" aria-label="Main options">
+        <a class="choice-card" href="{% url 'core:learn' %}">
+          <h2>Learn</h2>
+          <p>Explore software engineering tracks and filter paths based on your goals.</p>
+          <span class="choice-cta">Open Learning Paths</span>
+        </a>
+
+        <a class="choice-card" href="{% url 'core:internships' %}">
+          <h2>Find Internship</h2>
+          <p>Search internships by role and location with fast filters and cleaner listings.</p>
+          <span class="choice-cta">Browse Internships</span>
+        </a>
+
+        <a class="choice-card" href="{% url 'core:jobs' %}">
+          <h2>Find Job</h2>
+          <p>Review entry-level and junior jobs by role, seniority, and location.</p>
+          <span class="choice-cta">Explore Jobs</span>
+        </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>GradJobs</p>
+        <p>Focused, modern recruiting experience for students and recruiters.</p>
+      </div>
+    </footer>
 {% endblock content %}

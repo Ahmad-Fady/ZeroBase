@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}GradJobs | Internships{% endblock title %}
+{% block data_page %}"internships"{% endblock data_page %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<form method="GET">
+<div class="card card-body bg-light">
+    <!-- Crispy will handle the <form> tags and the button based on the Helper -->
+    <div class="col-auto">
+        {{ filter.form.title|as_crispy_field }}
+    </div>
+    <div class="col-auto">
+        {{ filter.form.city|as_crispy_field }}
+    </div>
+    <div class="col-auto">
+        {{ filter.form.location|as_crispy_field }}
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mt-2">Filter</button>
+    </div>
+</div>
+</form>
+
+<hr>
+
+<div class="row">
+    {% for offer in offers %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ offer.title }}</h5>
+                    <p class="text-muted">{{ offer.city }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<footer class="site-footer">
+  <div class="container footer-wrap">
+    <p>GradJobs Internships</p>
+    <p>Fast discovery for top internship openings.</p>
+  </div>
+</footer>
+
+{% endblock content %}

@@ -1,19 +1,17 @@
-/* .offer-container { */
+/* * { */
+/*   padding: 0; */
+/*   margin: 0; */
 /* } */
-.offer-card {
-  background-color: var(--white-item);
-  box-shadow: 50px;
-  /* width: 1700px; */
-  height: 180px;
-  border-radius: 16px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: 0px;
-  transition: all 0.1s ease-in-out;
-}
 
-.offer-card:hover {
-  border: 1.4px solid var(--blue);
-  background-color: var(--white-item);
-  /* width: 700px; */
+.filter-form {
+  /* gap: -5rem; */
+  /* display: inline; */
+  /* margin-right: calc(100% - 560px); */
+  /* max-width: none; */
+}
+.title-form {
+  /* margin-right: 0px; */
+}
+.name-form {
+  /* margin-left: -10rem; */
 }

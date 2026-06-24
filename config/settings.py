@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "accounts",
     # third-party
     "django_extensions",
+    "django_filters",
     "crispy_forms",
     "crispy_bootstrap5",
     # default apps

@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}GradJobs | Internships{% endblock title %}
+{% block data_page %}"internships"{% endblock data_page %}
+{% block content %}
+<main class="container">
+  <section class="page-head">
+    <p class="eyebrow">Find Internship</p>
+    <h1>Internship opportunities for early careers</h1>
+    <p>Filter internships by title/company and location to find the best match quickly.</p>
+  </section>
+
+<form class="offer-filter" method="GET">
+  {{ filter.form.as_div }}
+  <!-- <button type="submit">Filter Results</button> -->
+    <button type="submit" class="btn btn-primary mt-2">Filter</button>
+</form>
+{% if offers %}
+<div class="page-shell">
+  <section id="internship-grid" class="listing-grid" aria-live="polite">
+    {% for offer in offers %}
+    <article class="listing-card">
+      <div class="listing-top">
+      <h3 class="brand">{{ offer.title }}</h3>
+      </div>
+      <p class="meta">{{ offer.company.company_name }} • {{ offer.city }}, {{ offer.location }}</p>
+      <p class="meta">Posted {{ offer.offer_creation_date }}</p>
+      <p>{{ offer.description }}</p>
+    </article>
+    {% endfor %}
+  </section>
+    {% else %}
+    <hr class="d-block">
+    <div class="text-center">
+        <p>No internships found matching your criteria.</p>
+    </div>
+{% endif %}
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-wrap">
+    <p>GradJobs Internships</p>
+    <p>Fast discovery for top internship openings.</p>
+  </div>
+</footer>
+
+{% endblock content %}
+
+
+
+          <!-- <form id="studentForm" class="auth-step hidden"> -->
+          <!--   <h2 class="auth-title">Student sign up</h2> -->
+          <!--   <p class="small">Create your student profile — minimal and quick.</p> -->
+          <!--   <label class="small" for="studentUsername">Username</label> -->
+          <!--   <input id="studentUsername" name="username" autocomplete="username" placeholder="Username" required /> -->
+          <!--   <label class="small" for="studentEmail">Email</label> -->
+          <!--   <input id="studentEmail" type="email" autocomplete="email" placeholder="Email address" required /> -->
+          <!--   <label class="small" for="studentPassword">Password</label> -->
+          <!--   <div class="auth-password-wrap"> -->
+          <!--     <input id="studentPassword" type="password" autocomplete="new-password" placeholder="Password" required /> -->
+          <!--     <button type="button" class="auth-toggle-pass" data-target="studentPassword" aria-label="Show password">Show</button> -->
+          <!--   </div> -->
+          <!--   <div class="card-actions"> -->
+          <!--     <button type="submit">Continue</button> -->
+          <!--     <button type="button" id="studentBack" class="btn-outline">Back</button> -->
+          <!--   </div> -->
+          <!--   <p class="auth-switch small"> -->
+          <!--     Already have an account? -->
+          <!--     <button type="button" class="auth-link-btn to-login-auth">Log in</button> -->
+          <!--   </p> -->
+          <!-- </form> -->
+
+
+
+
+          <!-- <form id="companyForm" class="auth-step hidden"> -->
+          <!--   <h2 class="auth-title">Company sign up</h2> -->
+          <!--   <p class="small">Tell us what we need — nothing extra.</p> -->
+          <!--   <label class="small" for="companyName">Company name</label> -->
+          <!--   <input id="companyName" autocomplete="organization" placeholder="Company name" required /> -->
+          <!--   <label class="small" for="companyEmail">Email</label> -->
+          <!--   <input id="companyEmail" type="email" autocomplete="email" placeholder="Work email" required /> -->
+          <!--   <label class="small" for="companyPassword">Password</label> -->
+          <!--   <div class="auth-password-wrap"> -->
+          <!--     <input id="companyPassword" type="password" autocomplete="new-password" placeholder="Password" required /> -->
+          <!--     <button type="button" class="auth-toggle-pass" data-target="companyPassword" aria-label="Show password">Show</button> -->
+          <!--   </div> -->
+          <!--   <label class="small" for="companyIndustry">Industry</label> -->
+          <!--   <select id="companyIndustry" required> -->
+          <!--     <option value="">Select industry</option> -->
+          <!--     <option>Software</option> -->
+          <!--     <option>Finance</option> -->
+          <!--     <option>Education</option> -->
+          <!--     <option>Healthcare</option> -->
+          <!--     <option>Manufacturing</option> -->
+          <!--     <option>Other</option> -->
+          <!--   </select> -->
+          <!--   <label class="small" for="companySize">Company size</label> -->
+          <!--   <select id="companySize" required> -->
+          <!--     <option value="">Select size</option> -->
+          <!--     <option>1-10</option> -->
+          <!--     <option>11-50</option> -->
+          <!--     <option>51-200</option> -->
+          <!--     <option>200+</option> -->
+          <!--   </select> -->
+          <!--   <label class="small" for="companyWebsite">Website <span class="small">(optional)</span></label> -->
+          <!--   <input id="companyWebsite" type="url" autocomplete="url" placeholder="https://" /> -->
+          <!--   <label class="small" for="companyDescription">Description</label> -->
+          <!--   <textarea id="companyDescription" placeholder="Briefly describe what you do" required></textarea> -->
+          <!--   <div class="card-actions"> -->
+          <!--     <button type="submit">Continue</button> -->
+          <!--     <button type="button" id="companyBack" class="btn-outline">Back</button> -->
+          <!--   </div> -->
+          <!--   <p class="auth-switch small"> -->
+          <!--     Already have an account? -->
+          <!--     <button type="button" class="auth-link-btn to-login-auth">Log in</button> -->
+          <!--   </p> -->
+          <!-- </form> -->
